@@ -4,6 +4,7 @@ import testComponent from './Component/Test'
 import reptileComponent from './Component/Reptile'
 import solarComponent from './Component/Solar'
 import ballComponent from './Component/Ball'
+import echartRoutes from './Component/Echart/routeConfig'
 
 export default [
   { path: '/', component: defaultComponent },
@@ -11,4 +12,5 @@ export default [
   { path: '/reptile', component: reptileComponent },
   { path: '/solar', component: solarComponent },
   { path: '/ball', component: ballComponent },
+  ...echartRoutes,
 ]
