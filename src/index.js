@@ -1,23 +1,21 @@
 
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { Route, BrowserRouter } from 'react-router-dom'
-import registerServiceWorker from './registerServiceWorker'
+import React from "react";
+import {render} from "react-dom";
+import {Route, BrowserRouter } from "react-router-dom";
 
-import routeConfig from './routeConfig'
+import routers from "./router";
 
-ReactDOM.render(
-  <BrowserRouter >
-    <div>
-      { routeConfig.map(({ path, component }) => (
-        <Route
-          exact={path === '/'}
-          key={path}
-          path={path}
-          component={component}
-        />
-      )) }
-    </div>
-  </BrowserRouter>
-  , document.getElementById('root'))
-registerServiceWorker()
+render(
+	<BrowserRouter >
+		<div>
+			{ routers.map(({ path, component }) => (
+				<Route
+					exact={path === "/"}
+					key={path}
+					path={path}
+					component={component}
+				/>
+			)) }
+		</div>
+	</BrowserRouter>
+	, document.getElementById("root"));

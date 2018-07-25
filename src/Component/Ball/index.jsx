@@ -1,6 +1,5 @@
 import React from 'react'
 import config from './config'
-import cloneDeep from 'lodash/cloneDeep'
 
 export default class solarComponent extends React.PureComponent {
   constructor(props) {

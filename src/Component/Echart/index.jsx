@@ -1,9 +1,11 @@
 import React from 'react'
+require('./style.less')
 
 export default class EchartComponent extends React.PureComponent {
+  componentWillMount() {}
   render=() => (
-    <div style={{ width: window.screen.availHeight, height: 600 }} >
-      <div id="eChartsDemo" style={{ width: '100%', height: '100%' }} />
+    <div className="echart" >
+      <div id="echart" style={{ width: '100%', height: '100%' }} />
     </div>
     )
 }
