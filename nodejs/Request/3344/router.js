@@ -1,6 +1,6 @@
 const { getReptileData } = require("./component/reptile");
 const { getTranslate } = require("./component/baiduTranslate");
-const {postWeixinData} =  require("./component/weixin");
+const weixin =  require("./component/weixin/route");
 
 const errorType = require("../../../src/errorConfig");
 
@@ -16,21 +16,32 @@ const reptileData = async (data) => await getReptileData(data);
 
 const translate = async (data) => await getTranslate(data);
 
-const weixinData =  async (data) => await postWeixinData(data);
+const routes = [weixin];
 
-module.exports = {
+const routers = {
 	type:{
 		"defaultData":"get",
 		"/reptile":"get",
 		"/translate":"post",
 		"/posttest":"post",
-		"/weixin":"post"
 	},
 	callback:{
 		"defaultData":defaultData,
 		"/reptile":reptileData,
 		"/translate":translate,
 		"/posttest":(data)=>{return JSON.stringify(data);},
-		"/weixin":weixinData
 	}
 };
+
+routes.forEach(route=>{
+	if(route.type&&route.callback){
+		Object.keys(route.type).forEach(r=>{
+			routers.type[r] = route.type[r];
+		});
+		Object.keys(route.callback).forEach(r=>{
+			routers.callback[r] = route.callback[r];
+		});
+	}
+});
+
+module.exports = routers;
