@@ -1,6 +1,7 @@
 const { getReptileData } = require("./component/reptile");
 const { getTranslate } = require("./component/baiduTranslate");
 const weixin =  require("./component/weixin/route");
+const http = require("./component/http/route");
 
 const errorType = require("../../../src/errorConfig");
 
@@ -16,7 +17,7 @@ const reptileData = async (data) => await getReptileData(data);
 
 const translate = async (data) => await getTranslate(data);
 
-const routes = [weixin];
+const routes = [weixin,http];
 
 const routers = {
 	type:{
