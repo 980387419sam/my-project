@@ -30,6 +30,7 @@
     "jest": "20.0.4",
     "less": "^3.8.0",
     "less-loader": "^4.1.0",
+    "multiparty": "^4.2.0",
     "object-assign": "4.1.1",
     "postcss-flexbugs-fixes": "3.2.0",
     "postcss-loader": "2.0.8",
@@ -46,6 +47,7 @@
     "whatwg-fetch": "2.0.3"
   },
   "dependencies": {
+    "antd": "^3.7.3",
     "echarts": "^4.1.0",
     "jquery": "^3.3.1",
     "lodash": "^4.17.10",

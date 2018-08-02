@@ -1,5 +1,6 @@
 const url = require("url");
 var querystring = require("querystring");
+var multiparty = require("multiparty");
 
 const routes = require("./router.js");
 
@@ -38,7 +39,8 @@ const RequestFun = async (req, res) => {
 	reqUrl = url.parse(reqUrl);
 	const route = reqUrl.path;
 	res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-	if(routes.type[route] === "post"){
+	const type = routes.type[route];
+	if(type === "post"){
 		var post = "";     
 		req.on("data", function(chunk){    
 			post += chunk;  
@@ -47,6 +49,14 @@ const RequestFun = async (req, res) => {
 			post = querystring.parse(post); 
 			const datas = await request.postRouteDatas(route,post);
 			res.writeHead(200, { "Content-Type": "text/html; charset=utf-8", });
+			res.write(datas);
+			res.end();
+		});
+	}else if(type === "upload"){
+		res.setHeader("access-control-allow-headers", "authorization,x-requested-with");
+		var form = new multiparty.Form();
+		form.parse(req,async function(err, fields, files) {
+			const datas = await request.postRouteDatas(route,files);
 			res.write(datas);
 			res.end();
 		});
