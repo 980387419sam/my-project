@@ -45,6 +45,12 @@ const ajaxUploadFun = (urls,data,resolve)=>{
 	});
 };
 
+const ajaxDownloadFun = (urls, data, resolve) => {
+	$.get(urls, data, (res) => {
+		console.log(res);
+	});
+};
+
 export const ajaxFun = (type, path, data) => new Promise((resolve) => {
 	if (type === "get") { 
 		ajaxGetFun(url + path, data, resolve); 
@@ -52,6 +58,8 @@ export const ajaxFun = (type, path, data) => new Promise((resolve) => {
 		ajaxPostFun(url + path, data, resolve);
 	}else if(type==="upload"){
 		ajaxUploadFun(url + path, data, resolve);
+	}else if(type==="download"){
+		ajaxDownloadFun(url + path, data, resolve);
 	}else{
 		resolve({ error_code: errorType["10002"] });
 	}

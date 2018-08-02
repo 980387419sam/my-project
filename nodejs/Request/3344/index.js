@@ -5,14 +5,24 @@ var multiparty = require("multiparty");
 const routes = require("./router.js");
 
 class Request {
-	async getRouteDatas(route) {
+	async getRouteDatas(route,res) {
 		const hrefs = route.split("?");
 		const path = hrefs[0];
+		const type = routes.type[path];
 		const data = this.getRouteData(hrefs[1]);
-		if (routes.callback[path]) {
-			return routes.callback[path](data);
+		if(type === "download"){
+			await routes.callback[path](data,res);
+		}else{
+			let datas = "";
+			if (routes.callback[path]) {
+				datas =await routes.callback[path](data);
+			}else{
+				datas = await routes.callback.defaultData(data);
+			}
+			res.writeHead(200, { "Content-Type": "text/html; charset=utf-8", });
+			res.write(datas);
+			res.end();
 		}
-		return routes.callback.defaultData(data);
 	}
 
 	getRouteData(datas) {
@@ -61,10 +71,7 @@ const RequestFun = async (req, res) => {
 			res.end();
 		});
 	}else{
-		const datas = await request.getRouteDatas(route);
-		res.writeHead(200, { "Content-Type": "text/html; charset=utf-8", });
-		res.write(datas);
-		res.end();
+		await request.getRouteDatas(route,res);
 	}
 };
 
