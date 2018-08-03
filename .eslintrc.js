@@ -19,6 +19,7 @@ module.exports = {
   ],
   "parser": "babel-eslint",
   "rules": {
+    "react/prop-types": 0,
       "indent": [
           "error",
           "tab"

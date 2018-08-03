@@ -12,7 +12,6 @@ const ajaxGetFun = (urls, data, resolve) => {
 			window.location.href = `${href}/login`;
 			resolve("");
 		} else {
-			console.log("get", datas);
 			resolve(datas);
 		}
 	});
