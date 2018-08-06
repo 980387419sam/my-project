@@ -44,6 +44,8 @@ class NewsView extends React.PureComponent {
     			});
     			this.setState({
     				information:information,
+    			},()=>{
+    				$("#content").scrollTop( $("#content")[0].scrollHeight );
     			});
     		}
     	}else if(res.state === 2){
