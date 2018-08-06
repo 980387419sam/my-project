@@ -7,7 +7,7 @@ export default class chat extends React.PureComponent {
 	}
 	async UNSAFE_componentWillMount () {
 		if(window.location.href === href+"/chat"){
-			window.location.href = href+"/chat/username";
+			window.location.href = href+"/chat/login";
 		}
 	}
 

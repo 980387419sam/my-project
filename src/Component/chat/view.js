@@ -1,5 +1,7 @@
 import React from "react";
 import {href,ajaxFun} from "../../Request";
+import {notification} from "antd";
+import cloneDeep from "lodash/cloneDeep";
 import TextArea from "../../../node_modules/antd/lib/input/TextArea";
 import $ from "jquery";
 
@@ -10,10 +12,7 @@ class NewsView extends React.PureComponent {
 		this.username = "";
 	}
     state={
-    	information:[
-    		{name:"2",content:"222"},
-    		{name:"1",content:"111"},
-    	],
+    	information:[],
     	content:""
     }
     async UNSAFE_componentWillMount () {
@@ -22,16 +21,36 @@ class NewsView extends React.PureComponent {
     }
 
     componentDidMount=()=>{
-    	// console.log($("#content").scrollTop());
     	$("#content").scrollTop( $("#content")[0].scrollHeight );
     }
 
     getInformation=async()=>{
+    	const date = new Date();
     	const res = await ajaxFun("post","/chat/getnews",{
     		username:this.username,
-    		token:this.props.match.params.token
+    		token:this.props.match.params.token,
+    		date:date.getTime()
     	});
-    	console.log(res);
+    	if(!res.state){
+    		this.getInformation();
+    		if(res.information.length){
+    			const information = cloneDeep(this.state.information);
+    			res.information.forEach(infor=>{
+    				information.push({
+    					username:infor.username,
+    					content:infor.content,
+    					time:infor.time,
+    				});
+    			});
+    			this.setState({
+    				information:information,
+    			});
+    		}
+    	}else if(res.state === 2){
+    		window.location.href = href+"/chat/login";
+    	}else{
+    		notification.error({message:res.mes});
+    	}
     }
 
     changeContent=(e)=>{
@@ -41,15 +60,21 @@ class NewsView extends React.PureComponent {
     }
 
     send=async()=>{
+    	const date = new Date();
+    	const time = date.getTime();
+    	const content = this.state.content;
     	const res = await ajaxFun("post","/chat/sendnews",{
     		username:this.username,
     		token:this.props.match.params.token,
-    		content:this.state.content,
+    		content:content,
+    		date:time
     	});
     	this.changeContent({
     		target:{value:""}
     	});
-    	console.log(res);
+    	if(res.state){
+    		notification.error({message:res.mes});
+    	}
     }
 
 	render=()=> {
@@ -66,18 +91,18 @@ class NewsView extends React.PureComponent {
 					}}>
 					{
 						this.state.information.map((data,key)=>{
-							if(data.name === this.username){
+							if(data.username === this.username){
 								return <p 
 									style={{
 										textAlign:"right",
 										width:"100%"
 									}}
-									key = {data.name+key}
+									key = {data.username+key}
 								>
 									{data.content}
 								</p>;
 							}
-							return <p style={{width:"100%"}} key = {data.name+key}>{data.name+":  "+data.content}</p>;
+							return <p style={{width:"100%"}} key = {data.username+key}>{data.username+":  "+data.content}</p>;
 						})
 					}
 				</div>

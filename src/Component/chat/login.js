@@ -1,7 +1,7 @@
 import React from "react";
 import {href,ajaxFun} from "../../Request";
 
-export default class username extends React.PureComponent {
+export default class login extends React.PureComponent {
 	constructor(props){
 		super(props);
 		this.userName = "";
