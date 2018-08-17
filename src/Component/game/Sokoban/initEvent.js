@@ -143,28 +143,34 @@ export default class initEvent {
     	const length = this.recordStepDatas.length;
     	if(isStop){
     		const time = (new Date()).getTime() - this.dateTime;
-    		console.log("成功了","用时"+time/1000+"秒",length+"步");
+    		let mes = "";
+    		if(timer){
+    			mes = "成功了！用时"+time/1000+"秒，"+length+"步";
+    		}else{
+    			mes = "成功了！"+length+"步";
+    		}
+    		console.log(mes);
     		this.clearTimer();
     		this.arrangeDatas(timer);
     		return;
     	}
-    	isStop = this.ckeckDeadAngles();
-    	if(isStop){
-    		this.clearTimer();
-    		this.revoke();
-    		if(timer) this.autoArrow();
-    		return;
-    	}
-    	isStop = this.boxEndWelt();
-    	if(isStop){
-    		this.clearTimer();
-    		this.revoke();
-    		if(timer) this.autoArrow();
-    		return;
-    	}
-    	if(this.count&&length>this.count){
-    		this.clearTimer();
-    		if(timer){
+    	if(timer){
+    		isStop = this.ckeckDeadAngles();
+    		if(isStop){
+    			this.clearTimer();
+    			this.revoke();
+    			this.autoArrow();
+    			return;
+    		}
+    		isStop = this.boxEndWelt();
+    		if(isStop){
+    			this.clearTimer();
+    			this.revoke();
+    			this.autoArrow();
+    			return;
+    		}
+    		if(this.count&&length>this.count){
+    			this.clearTimer();
     			this.resetGame();
     			this.autoArrow(true);
     		}
@@ -332,8 +338,13 @@ export default class initEvent {
     			directions1.push(key);
     		}
     	});
-    	const k = (Math.random()+"")[3];
-    	const direction = directions[(k*1)%directions.length];
+    	let direction = 4;
+    	if(directions.length===1){
+    		direction = directions[0];
+    	}else{
+    		const k = (Math.random()+"")[3];
+    		direction = directions[(k*1)%directions.length];
+    	}
     	if(direction===0){
     		this.arrow(up);
     	}else if(direction===1){
