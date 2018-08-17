@@ -8,6 +8,7 @@ import weixinRoutes from "./Component/Weixin/router";
 import fileRoutes from "./Component/file/router";
 import chatRoutes from "./Component/chat/router";
 import gameRoutes from "./Component/game/router";
+import ImageConverterRoutes from "./Component/ImageConverter/router";
 
 export default [
 	{ path: "/", component: defaultComponent },
@@ -18,5 +19,6 @@ export default [
 	...weixinRoutes,
 	...fileRoutes,
 	...chatRoutes,
-	...gameRoutes
+	...gameRoutes,
+	...ImageConverterRoutes
 ];
