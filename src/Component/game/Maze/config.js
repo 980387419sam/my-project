@@ -1,12 +1,37 @@
 
+const mwidth = 30;
+const mheight = 30;
+const mproportion = 10;
+
+export const ImgConfig = {
+	company:1,
+	company2:5,
+};
 
 export const Maps = {
-	width:7,
-	height:7,
-	proportion:10,
+	width:mwidth,
+	height:mheight,
+	proportion:mproportion,
+	widthPx :mwidth*mproportion,
+	heightPx:mheight*mproportion,
+	rgbas:[
+		{
+			rgb:[150,150,150],
+			color:"rgb(0,0,0)"
+		},
+		{
+			rgb:[170,170,170],
+			color:"rgb(100,100,100)"
+		},
+		{
+			rgb:[180,180,180],
+			color:"rgb(200,200,200)"
+		}
+	],
+	rgbasDefault:"rgb(255,255,255)",
 	types: {
 		wall:"wall",
-		box:"box",
+		path:"path",
 		start:"start",
 		end:"end"
 	},
