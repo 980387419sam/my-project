@@ -23,9 +23,6 @@ export default class MazeComponent extends React.PureComponent {
     				display:"none"
     			}}
     			ref={(r) => { this.canvas = r; }}
-    			onMouseDown={(e)=>{
-    				this.maze.canvas0nMouseDown(e);
-    			}}
     		/>
     		<canvas
     			style={{
@@ -38,9 +35,11 @@ export default class MazeComponent extends React.PureComponent {
     			style={{
     				width: Maps.widthPx+"px",
     				height: Maps.heightPx+"px",
-    				display:"none"
     			}}
     			ref={(r) => { this.converter2 = r; }}
+    			onMouseDown={(e)=>{
+    				this.maze.canvas0nMouseDown(e);
+    			}}
     		/>
     	</div>;
     }
