@@ -37,9 +37,6 @@ export default class MazeComponent extends React.PureComponent {
     				height: Maps.heightPx+"px",
     			}}
     			ref={(r) => { this.converter2 = r; }}
-    			onMouseDown={(e)=>{
-    				this.maze.canvas0nMouseDown(e);
-    			}}
     		/>
     	</div>;
     }

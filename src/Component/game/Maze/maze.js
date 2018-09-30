@@ -11,6 +11,7 @@ export default class Maze {
 		this.a = "_";
 		this.allCoordinates = {
 			wall:{},
+			route:[]
 		};
 		this.ctxc2 = null;
 		this.paths = [];
@@ -36,19 +37,88 @@ export default class Maze {
     				arrows:Maps.startDirection,
     				isTrue: 1,
     			}]);
-    			this.initStartFunc(company,ctxc);
-    			this.initStartFunc(company,ctxc);
-    			this.initStartFunc(company,ctxc);
-    			this.initStartFunc(company,ctxc);
-    			this.initStartFunc(company,ctxc);
-    			console.log(this.paths);
+				this.findInflectionPoint()
+				// this.initStartFunc(company,ctxc);
+				// window.mazeStart = (isDebug)=>{
+				// 	this.initStartFunc(company,ctxc,isDebug);
+				// 	console.log(this.paths);
+				// }
+    			// console.log(this.paths);
     		}
     	};
     	img.src =require("./timg.jpg");
-    }
+	}
+	
+	findInflectionPoint(){
+		const pathDatas = this.paths[this.paths.length-1];
+		const pathData = pathDatas.find((pas)=>pas.isTrue===1);
+		const walls = this.allCoordinates.wall
+		let coor = [...pathData.coordinate]
+		while(!walls[coor.join(this.a)]){
+			coor = [coor[0],coor[1]+1];
+		}
+		let endcoor = [...Ends.coordinate]
+		while(!walls[endcoor.join(this.a)]){
+			endcoor = [endcoor[0],endcoor[1]+1];
+		}
+		endcoor = [endcoor[0],endcoor[1]-1]
+		const {arrows} = Maps;
+		let nextPoint = this.nextPoint({
+			coordinate:[coor[0],coor[1]-1],nextArrow:arrows.down
+		})
+		let num = 0 
+		while((nextPoint[0]!==endcoor[0]||nextPoint[1]!==endcoor[1])&&num<25000){
+			num ++
+			nextPoint = this.nextPoint(nextPoint)
+		}
+		console.log(nextPoint,endcoor)
+	}
+	nextPoint({coordinate:[x,y],nextArrow:arrow}){
+		const {arrows} = Maps;
+		const walls = this.allCoordinates.wall
+		let coordinate = [x,y]
+		let nextArrow
+		if(arrow === arrows.up){
+			if(walls[[x,y-1].join(this.a)]){
+				nextArrow = arrows.left
+			}else {
+				coordinate = [x,y-1]
+				nextArrow = walls[[x+1,y-1].join(this.a)] ? arrow : arrows.right
+			}
+		}
+		if(arrow === arrows.right){
+			if(walls[[x+1,y].join(this.a)]){
+				nextArrow = arrows.up
+			}else {
+				coordinate = [x+1,y]
+				nextArrow = walls[[x+1,y+1].join(this.a)] ? arrow : arrows.down
+			}
+		}
+		if(arrow === arrows.down){
+			if(walls[[x,y+1].join(this.a)]){
+				nextArrow = arrows.right
+			}else {
+				coordinate = [x,y+1]
+				nextArrow = walls[[x-1,y+1].join(this.a)] ? arrow : arrows.left
+			}
+		}
+		if(arrow === arrows.left){
+			if(walls[[x-1,y].join(this.a)]){
+				nextArrow = arrows.down
+			}else {
+				coordinate = [x-1,y]
+				nextArrow = walls[[x-1,y-1].join(this.a)] ? arrow : arrows.right
+			}
+		}
+		return {
+			coordinate,
+			nextArrow,
+		}
+	}
 
-	arrowsFun=(pathData,company,ctxc)=>{
-		const {arrows,widthPx,heightPx,range} = Maps;
+	arrowsFun=(pathData,company,ctxc,isDebug)=>{
+		if(isDebug){debugger}
+ 		const {arrows,widthPx,heightPx,range} = Maps;
 		const isUp = pathData.arrows === arrows.up;
 		const isDown = pathData.arrows === arrows.down;
 		const isRight = pathData.arrows === arrows.right;
@@ -59,7 +129,9 @@ export default class Maze {
 		const paths = [];
 		let coor = [...startCoor];
 		while(!wallCoordinates[coor.join(this.a)]){
-			coors.push(cloneDeep(coor));
+			if(coor[0]!==startCoor[0]||coor[1]!==startCoor[1]){
+				coors.push(cloneDeep(coor));
+			}
 			if(isUp){
 				coor = [coor[0],coor[1]-1];
 			}else if(isDown){
@@ -129,9 +201,11 @@ export default class Maze {
 					}else if(isRight||isLeft){
 						contsa = lislen === lis[lis.length-1][0]-lis[0][0]+1;
 					}
-					if(lislen&&contsa){
+					const cods = lis[(lislen-(lislen%2))/2]
+					const randas = Math.pow(cods[0] - startCoor[0],2)+Math.pow(cods[1] - startCoor[1],2)>Math.pow(range/2,2)
+					if(lislen&&contsa&&randas){
 						paths.push({
-							coordinate: lis[(lislen-(lislen%2))/2],
+							coordinate: cods,
 							arrows:arr,
 							isTrue: 1,
 						});
@@ -162,24 +236,29 @@ export default class Maze {
 		pathData.isTrue = 0;
 		if(paths.length){
 			pathData.isTrue = 2;
+			paths.forEach((path)=>{
+				const coordinate = path.coordinate;
+				ctxc.beginPath();
+				ctxc.fillStyle = "blue";
+				ctxc.fillRect( coordinate[0]*company,coordinate[1]*company, company, company);
+				ctxc.fill();
+				ctxc.closePath();
+			});
+			this.paths.push(paths);
+		}else{
+			const pats = this.paths.pop()
+			if(pats.some((a)=>{return a.isTrue ===1})){
+				this.paths.push(pats);
+			}
 		}
-		paths.forEach((path)=>{
-			const coordinate = path.coordinate;
-    		ctxc.beginPath();
-    		ctxc.fillStyle = "blue";
-    		ctxc.fillRect( coordinate[0]*company,coordinate[1]*company, company, company);
-    		ctxc.fill();
-    		ctxc.closePath();
-		});
-		this.paths.push(paths);
 	}
 	
-	initStartFunc=(company,ctxc)=>{
+	initStartFunc=(company,ctxc,isDebug)=>{
 		if(!this.paths.length) return;
 		const pathDatas = this.paths[this.paths.length-1];
 		const pathData = pathDatas.find((pas)=>pas.isTrue===1);
 		if(pathData){
-			this.arrowsFun(pathData,company,ctxc);
+			this.arrowsFun(pathData,company,ctxc,isDebug);
 		}else{
 			if(this.paths.length){
 				this.paths = this.paths.splice(0,this.paths.length-1);
@@ -315,7 +394,9 @@ export default class Maze {
     					coordinate: dta.coordinate
     				};
     				color = rg.color;
-    			}
+    			}else{
+    				this.allCoordinates.route.push(dta.coordinate)
+				}
     			let col;
     			if(appointRgba){
     				col = appointRgba.find(r=>db[0]===r.rgb[0]&&db[1]===r.rgb[1]&&db[2]===r.rgb[2]);
