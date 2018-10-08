@@ -21,12 +21,14 @@ export const ImgConfig = {
 };
 
 export const Maps = {
+	img:require('./timg.jpg'),
+	pathColor:'red',
 	width:mwidth,
 	height:mheight,
 	proportion:mproportion,
 	widthPx :mwidth*mproportion,
 	heightPx:mheight*mproportion,
-	range:10,
+	range:11,
 	startDirection : arrows.right,
 	rgbas:[
 		{
@@ -42,19 +44,16 @@ export const Maps = {
 	time:1
 };
 
-export const Wall = {
-	color:"rgb(0,0,0)"
-};
-
 export const Start = {
 	coordinate:[],
-	color:"rgba(111,222,333,1)",
+	color:'#25ff00'
 };
 
 export const Ends = {
-	coordinate:[]
+	coordinate:[],
+	color:'#8c80e6'
 };
 
 export default {
-	Maps,Wall,Start,Ends
+	Maps,Start,Ends,ImgConfig
 };
