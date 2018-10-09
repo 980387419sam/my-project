@@ -36,6 +36,11 @@ export default class Maze {
 			this.initStartEnds();
 			this.mapName = md5(JSON.stringify(this.allCoordinates));
 			this.configMd5 = md5(JSON.stringify(config));
+			// this.ctx.beginPath();
+			// this.ctx.fillStyle = Maps.pathColor;
+			// this.ctx.fillRect(10*company,22*company, company, company);
+			// this.ctx.fill();
+			// this.ctx.closePath();
     		if(Start.coordinate&&Start.coordinate.length&&Ends.coordinate&&Ends.coordinate.length){
 				this.findInflectionPoint(company)
     		}else{
@@ -101,13 +106,23 @@ export default class Maze {
 			let len = 0
 			const timer = setInterval(()=>{
 				const path = paths[len]
-				if(path){
+				const point = nextPoints[len]
+				if(point){
 					this.ctx.beginPath();
 					this.ctx.fillStyle = Maps.pathColor;
-					this.ctx.fillRect( path[0]*company,path[1]*company, company, company);
+					this.ctx.fillRect( point.coordinate[0]*company,point.coordinate[1]*company, company, company);
 					this.ctx.fill();
 					this.ctx.closePath();
-					len+=1;
+				}
+				if(path){
+					this.ctx.beginPath();
+					this.ctx.fillStyle = "#2900ff";
+					this.ctx.fillRect( path[0]*company-1,path[1]*company-1, company, company);
+					this.ctx.fill();
+					this.ctx.closePath();
+				}
+				if(point||path){
+					len+=1
 				}else{
 					clearInterval(timer)
 				}
@@ -121,44 +136,39 @@ export default class Maze {
 		const points = cloneDeep(nextPoints)
 		let paths = []
 		let index = 0
-		let point = points[index]
-		while(point){
-			index+=1
-			const point1 = points[index]
-			if(point1){
-				const {nextArrow,coordinate} = point1
-				if(point.nextArrow !== nextArrow){
-					const fund = (isTure) => {
-						let point2 = isTure? [coordinate[0]+1,coordinate[1]] : [coordinate[0],coordinate[1]-1]
-						paths.push(cloneDeep(point.coordinate))
-						paths.push(cloneDeep(point1.coordinate))
-						const points2 = []
-						while(!walls[point2.join(this.a)]&&!points.some((a)=>(JSON.stringify(a.coordinate)===JSON.stringify(point2)))){
-							points2.push(point2)
-							point2 =isTure? [point2[0]+1,point2[1]]:[point2[0],point2[1]-1]
-						}
-						const ind = points.findIndex((a)=>(JSON.stringify(a.coordinate)===JSON.stringify(point2)))
-						if(ind){
-							paths = [...paths,...points2]
-							point = points[ind]
-							index = ind
-						}else{
-							point = point1
-						}
-					}
-					if(nextArrow === arrows.down){
-						fund(true)
-					}else if(nextArrow === arrows.right){
-						fund(false)
-					}else{
-						point = point1
-					}
+		let point = cloneDeep(points[index])
+		let l = 0
+		const func = (pt,ist)=>{
+			const coor = ist ? [pt.coordinate[0]+1,pt.coordinate[1]] : [pt.coordinate[0],pt.coordinate[1]-1]
+			const points2 = []
+			let i = 0
+			while(!walls[coor.join(this.a)]&&!points.some((a)=>(JSON.stringify(a.coordinate)===JSON.stringify(coor)))&&i<Maps.heightPx){
+				i++
+				points2.push(coor)
+				if(ist){
+					coor[0]+=1
 				}else{
-					paths.push(cloneDeep(point.coordinate))
-					point = point1
+					coor[1]-=1
 				}
+			}
+			const len = points.findIndex((a)=>(JSON.stringify(a.coordinate)===JSON.stringify(coor)))
+			if(len>0){
+				paths = [...paths,...points2]
+			}
+			return len
+		}
+		while(point&&l<points.length){
+			l+=1
+			index+=1
+			paths.push(point.coordinate)
+			if(point.nextArrow === arrows.down){
+				const len = func(point,true)
+				point = cloneDeep(points[len>0?len:index])
+			}else if(point.nextArrow === arrows.right){
+				const len = func(point,false)
+				point = cloneDeep(points[len>0?len:index])
 			}else{
-				point = point1
+				point = cloneDeep(points[index])
 			}
 		}
 		console.log(paths)

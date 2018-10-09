@@ -1,0 +1,121 @@
+//起点到终点查找法
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div>123</div>
+    
+    <script>
+        window.onload = function(){
+            const col_size = 5
+            const points = []
+            const walls = []
+            const paths = []
+            let start = null
+            let end = null
+	        const map =[
+                1,0,2,0,0,
+                0,2,2,2,0,
+                0,2,2,2,0,
+                0,2,2,2,0,
+                0,0,0,0,3
+            ];
+
+            const initPoints = () =>{
+                map.forEach((m,i)=>{
+                    const x = i % col_size
+                    const y = Math.floor(i / col_size)
+                    const c = {
+                        coor: [x,y],
+                    }
+                    if(m===1){
+                        start = c
+                        paths.push(c)
+                    }
+                    if(m===2){
+                        walls.push(c)
+                    }
+                    if(m===3){
+                        end = c
+                    }
+                    points.push(c)
+                })
+            }
+
+            const setNum = (point)=>{
+                var a1 = start.coor[0] - point.coor[0];
+                var b1 = start.coor[1] - point.coor[1];
+                var a2 = end.coor[0] - point.coor[0];
+                var b2 = end.coor[1] - point.coor[1];
+                return Math.sqrt(a1*a1 + b1*b1) + Math.sqrt(a2*a2 + b2*b2)
+            }
+            
+            let num = 0
+
+            const initPaths = () => {
+                const pLength = points.length
+                const nowPoint = paths.shift()
+		    	var arr=[];
+		    	if( JSON.stringify(nowPoint) === JSON.stringify(end) ){
+					return;
+                }
+		    	walls.push(nowPoint)
+		    	for(var i=0; i< pLength;i++){
+                    const point = points[i]
+		    		if(!(walls.some((a)=>(a===point))||paths.some((a)=>(a===point)))){
+		    			arr.push(point)
+		    		}
+                }
+                const arr_length = arr.length
+                for(var i=0; i< arr_length; i++){
+                    if(Math.abs(nowPoint.coor[0]-arr[i].coor[0])<=1 &&
+                    Math.abs(nowPoint.coor[1]-arr[i].coor[1])<=1){
+                        arr[i].num = setNum(arr[i]);
+                        arr[i].parent = nowPoint;
+                        paths.push(arr[i])
+                    }
+                }
+		    	paths.sort(function(a,b){
+					return a.num - b.num;
+                });
+                num++
+                if(num<=1000){
+				    initPaths();
+                }
+                
+            }
+
+            const initCoor = () =>{
+				var result = [];
+				var wall = walls.pop();
+				var iNow = 0;
+				findParent(wall);
+				function findParent(w){
+					result.unshift(w.coor);
+					if( w.parent === start ){
+						return;
+					}
+					findParent(w.parent);
+                }
+                console.log(result)
+            }
+
+            const init = () =>{
+                initPoints()
+                initPaths()
+                initCoor()
+            }
+            init()
+
+
+        }
+    </script>
+</body>
+</html>

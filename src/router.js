@@ -9,6 +9,7 @@ import fileRoutes from "./Component/file/router";
 import chatRoutes from "./Component/chat/router";
 import gameRoutes from "./Component/game/router";
 import ImageConverterRoutes from "./Component/ImageConverter/router";
+import completeRoutes from "./Complete/route"
 
 export default [
 	{ path: "/", component: defaultComponent },
@@ -20,5 +21,6 @@ export default [
 	...fileRoutes,
 	...chatRoutes,
 	...gameRoutes,
-	...ImageConverterRoutes
+	...ImageConverterRoutes,
+	...completeRoutes,
 ];
