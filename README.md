@@ -1,5 +1,6 @@
 #个人项目第二期调整
 - 本期主题，完成Pages文件
+- 引入mongodb进行数据管理
 
 ## 技术栈
 - React
@@ -10,6 +11,7 @@
 - echarts
 - jquery
 - lodash
+- mongodb
 
 ## 项目目录
 # src
