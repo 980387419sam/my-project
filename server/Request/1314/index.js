@@ -5,19 +5,19 @@ var multiparty = require("multiparty");
 const routes = require("./router.js");
 
 class Request {
-	async getRouteDatas(route,res) {
+	async getRouteDatas(route,res, alls) {
 		const hrefs = route.split("?");
 		const path = hrefs[0];
 		const type = routes.type[path];
 		const data = this.getRouteData(hrefs[1]);
 		if(type === "download"){
-			await routes.callback[path](data,res);
+			await routes.callback[path](data, alls, res);
 		}else{
 			let datas = "";
 			if (routes.callback[path]) {
-				datas =await routes.callback[path](data);
+				datas =await routes.callback[path](data, alls);
 			}else{
-				datas = await routes.callback.defaultData(data);
+				datas = await routes.callback.defaultData(data, alls);
 			}
 			res.writeHead(200, { "Content-Type": "text/html; charset=utf-8", });
 			res.write(datas);
@@ -34,20 +34,28 @@ class Request {
 		});
 		return items;
 	}
-	async postRouteDatas(path,data){
+	async postRouteDatas(path,data,alls){
 		if (routes.callback[path]) {
-			return routes.callback[path](data);
+			return routes.callback[path](data, alls);
 		}
-		return routes.callback.defaultData(data);
+		return routes.callback.defaultData(data, alls);
 	}
 }
 
-module.exports = async (req, res) => {
-    const request = new Request();
+module.exports = async (req, res, mongo) => {
+	const request = new Request();
+	const IP = req.headers['x-real-ip'] || req.headers['x-forwarded-for'] || req.socket.remoteAddress
 	let reqUrl = req.url;
 	reqUrl = url.parse(reqUrl);
 	const route = reqUrl.path;
 	res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+	res.setHeader("Access-Control-Allow-Origin", "http://192.168.31.211:3000");
+	const alls = {
+		IP,
+		mongo,
+		req,
+		res,
+	}
 	const type = routes.type[route];
 	if(type === "post"){
 		var post = "";     
@@ -56,7 +64,7 @@ module.exports = async (req, res) => {
 		});
 		req.on("end",async function(){  
 			post = querystring.parse(post); 
-			const datas = await request.postRouteDatas(route,post);
+			const datas = await request.postRouteDatas(route,post,alls);
 			res.writeHead(200, { "Content-Type": "text/html; charset=utf-8", });
 			res.write(datas);
 			res.end();
@@ -65,12 +73,12 @@ module.exports = async (req, res) => {
 		res.setHeader("access-control-allow-headers", "authorization,x-requested-with");
 		var form = new multiparty.Form();
 		form.parse(req,async function(err, fields, files) {
-			const datas = await request.postRouteDatas(route,files);
+			const datas = await request.postRouteDatas(route,files,alls);
 			res.write(datas);
 			res.end();
 		});
 	}else{
-		await request.getRouteDatas(route,res);
+		await request.getRouteDatas(route,res,alls);
     }
 };
 

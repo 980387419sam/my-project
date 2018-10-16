@@ -1,9 +1,9 @@
+const v2 = require('./v2/route')
 
 
+const routes = [v2];
 
-const routes = [];
-
-const errorType = require("./errorConfig");
+const errorType = require("../../../src/Request/errorConfig");
 
 const defaultData = (code = '10000') => {
 	const datas = {

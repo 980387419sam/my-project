@@ -1,35 +1,36 @@
-var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/test";
- 
-MongoClient.connect(url, function(err, db) {
-    if (err) throw err;
-    console.log("数据库已创建!");
-    var dbase = db.db("test");
-    // var myobj = { name: "菜鸟教程", url: "www.runoob" };
-    // dbase.collection("site").insertOne(myobj, function(err, res) {
-    //     if (err) throw err;
-    //     console.log("文档插入成功");
-    //     db.close();
-    // });
-    // var myobjs =  [
-    //     { name: '菜鸟工具', url: 'https://c.runoob.com', type: 'cn'},
-    //     { name: 'Google', url: 'https://www.google.com', type: 'en'},
-    //     { name: 'Facebook', url: 'https://www.google.com', type: 'en'}
-    // ];
-    // dbase.collection("site").insertMany(myobjs, function(err, res) {
-    //     if (err) throw err;
-    //     console.log("插入的文档数量为: " + res.insertedCount);
-    //     db.close();
-    // });
-    // dbase.collection("site"). find({}).toArray(function(err, result) { // 返回集合中所有数据
-    //     if (err) throw err;
-    //     console.log(result);
-    //     db.close();
-    // });
-    var whereStr = {"name":'菜鸟教程'};  // 查询条件
-    dbase.collection("site").find(whereStr).toArray(function(err, result) {
-        if (err) throw err;
-        console.log(result);
-        db.close();
-    });
-});
+
+
+var nodemailer = require('nodemailer');
+
+		// 创建一个SMTP客户端配置
+		var config = {
+			host: 'smtp.qq.com',
+			port: 587,
+			auth: {
+				user: '965945892@qq.com',
+				pass: 'nwvrgdtrfqukbdja' 
+			}
+		};
+		var transporter = nodemailer.createTransport(config);
+		var options = {
+			from           : '965945892@qq.com',
+			to             : '969623997@qq.com',
+			subject        : 'aaa',
+			text           : 'bbb',
+			html           : '<h1>你好，这是一封来自的邮件！</h1>',
+			// attachments    :
+			// 	[
+			// 		{
+			// 			filename: 'img1.png',            // 改成你的附件名
+			// 			path: '../../public/images/1.jpg',  // 改成你的附件路径
+			// 			cid : '00000001'                 // cid可被邮件使用
+			// 		}
+			// 	]
+		};
+		console.log(options,config);
+		transporter.sendMail(options, function(error, info){
+			if(error) {
+				return console.log(error);
+			}
+			console.log('mail sent:', info.response);
+		});

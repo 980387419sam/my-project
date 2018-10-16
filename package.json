@@ -3,17 +3,18 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "antd": "3.7.3",
+    "antd": "^3.10.1",
     "echarts": "4.1.0",
     "jquery": "3.3.1",
     "lodash": "4.17.10",
     "mathjs": "5.0.4",
+    "nodemailer": "^4.6.8",
     "react": "16.5.2",
     "react-dom": "16.5.2",
     "react-router-dom": "^4.3.1"
   },
   "scripts": {
-    "mongod":"mongod",
+    "mongod": "sudo mongod",
     "react-start": "node scripts/start.js",
     "start": "node scripts/start.js && node server",
     "server": "node server",
