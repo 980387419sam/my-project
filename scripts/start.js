@@ -108,7 +108,7 @@ checkBrowsers(paths.appPath, isInteractive)
         clearConsole();
       }
       console.log(chalk.cyan('Starting the development server...\n'));
-      openBrowser(urls.lanUrlForConfig);
+      // openBrowser(urls.lanUrlForConfig);
     });
 
     ['SIGINT', 'SIGTERM'].forEach(function(sig) {

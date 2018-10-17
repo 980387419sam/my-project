@@ -3,7 +3,7 @@ const main = require('./main/route')
 
 const routes = [main];
 
-const errorType = require("../../../src/Request/error");
+const errorType = require("../../src/common/error");
 
 const defaultData = (code = '10000') => {
 	const datas = {

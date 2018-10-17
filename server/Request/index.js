@@ -49,7 +49,7 @@ module.exports = async ({req, res, mongo, fs}) => {
 	let reqUrl = req.url;
 	reqUrl = url.parse(reqUrl);
 	const route = reqUrl.path;
-	res.setHeader("Access-Control-Allow-Origin", "http://"+urls.href+urls.srcPort);
+	res.setHeader("Access-Control-Allow-Origin", "http://"+urls.href+":"+urls.srcPort);
 	const alls = { IP, mongo, req, res, fs}
 	const type = routes.type[route];
 	if(type === "post"){

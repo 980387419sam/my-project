@@ -2,6 +2,7 @@ import React from "react";
 import { Form, Input, Button, Steps} from 'antd';
 import cloneDeep from 'lodash/cloneDeep'
 import {postSendEmail} from './store'
+import styles from './style.module.css'
 
 const Step = Steps.Step;
 const FormItem = Form.Item;
@@ -31,11 +32,6 @@ export default class RegisterForm extends React.PureComponent{
         },
     }
     UNSAFE_componentWillMount=async()=>{
-        console.log(process)
-        const res = await postSendEmail({
-            email:123
-        })
-        console.log(res)
     }
     getStep0=()=>{
         const onChangeInput=(e)=>{
@@ -98,7 +94,7 @@ export default class RegisterForm extends React.PureComponent{
     inputEmailCode=({title,label,datas,onChangeInput,changeButton})=>{
         return (
             <Form key={label}>
-                <p className="registerFormTil">{title}</p>
+                <p className={styles.registerFormTil}>{title}</p>
                 <FormItem
                     {...formItemLayout}
                     label={label}
@@ -114,15 +110,15 @@ export default class RegisterForm extends React.PureComponent{
                 <Button 
                     type="primary"
                     onClick={changeButton}
-                    className="registerFormConfirm"
+                    className={styles.registerFormConfirm}
                 >确定</Button>
             </Form>
         )
     }
     render(){
         const {current} = this.state
-        return <div className="registerForm">
-            <p className="registerFormTitle">注册</p>
+        return <div className={styles.registerForm}>
+            <p className={styles.registerFormTitle}>注册</p>
             <Steps current={current}>
                 <Step title="输入邮箱" />
                 <Step title="邮箱验证" />

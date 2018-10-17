@@ -5,7 +5,7 @@ export default class main extends React.PureComponent {
 	}
 	render(){
 		return (
-			<div >main</div>
+			<div></div>
 		);
 	}
 }

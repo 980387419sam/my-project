@@ -1,5 +1,5 @@
 const fs = require("fs");
-const errors = require('./error')
+const errors = require('../error')
 
 // http://www.runoob.com/nodejs/nodejs-fs.html
 
@@ -9,9 +9,9 @@ class Fs {
             state:0,
         }
         if (err) {
-            datas.state = 10001
+            datas.state = 20001
             datas.err = err
-            datas.mes = errors[datas.state]
+            datas.message = errors[datas.state]
         }else{
             datas.data = data
         }
