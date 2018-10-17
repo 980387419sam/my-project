@@ -1,7 +1,7 @@
 
 const http = require("http");
 const Request = require("./Request/index.js");
-const common = require("../common");
+const common = require("../src/common");
 const Mongo = require("./mongod");
 const Fs = require("./fs");
 

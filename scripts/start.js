@@ -97,9 +97,9 @@ checkBrowsers(paths.appPath, isInteractive)
       if (isInteractive) {
         
         const fs = require("fs");
-        const common = require("../common");
+        const common = require("../src/common");
         fs.writeFile(common.urlsPath, 
-          `module.exports = {urls:"${urls.lanUrlForConfig}",srcPort:"${port}"}`, 
+          `module.exports = {href:"${urls.lanUrlForConfig}",srcPort:"${port}"}`, 
         (err)=>{
           if (err) {
             return console.error(err);

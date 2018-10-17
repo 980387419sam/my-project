@@ -1,6 +1,7 @@
 const url = require("url");
 var querystring = require("querystring");
 var multiparty = require("multiparty");
+const urls = require("../../src/common/urls")
 
 const routes = require("./router.js");
 
@@ -48,7 +49,7 @@ module.exports = async ({req, res, mongo, fs}) => {
 	let reqUrl = req.url;
 	reqUrl = url.parse(reqUrl);
 	const route = reqUrl.path;
-	res.setHeader("Access-Control-Allow-Origin", "http://192.168.31.211:3000");
+	res.setHeader("Access-Control-Allow-Origin", "http://"+urls.href+urls.srcPort);
 	const alls = { IP, mongo, req, res, fs}
 	const type = routes.type[route];
 	if(type === "post"){

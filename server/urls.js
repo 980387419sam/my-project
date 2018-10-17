@@ -1,1 +1,0 @@
-module.exports = {urls:"192.168.31.43",srcPort:"3000"}

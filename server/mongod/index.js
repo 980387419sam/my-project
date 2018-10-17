@@ -1,6 +1,8 @@
 
 const MongoClient = require('mongodb').MongoClient;
-const common = require('../common');
+const common = require('../../src/common');
+
+// http://www.runoob.com/nodejs/nodejs-mongodb.html
 
 class Mongo {
     constructor(){

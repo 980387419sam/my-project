@@ -1,4 +1,5 @@
 import React from "react";
+import RegisterForm from './registerForm'
 
 export default class register extends React.PureComponent{
     UNSAFE_componentWillMount(){
@@ -7,7 +8,7 @@ export default class register extends React.PureComponent{
     render(){
         return (
             <div className="register">
-                123
+                <RegisterForm/>
             </div>
         )
     }

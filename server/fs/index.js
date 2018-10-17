@@ -1,6 +1,8 @@
 const fs = require("fs");
 const errors = require('./error')
 
+// http://www.runoob.com/nodejs/nodejs-fs.html
+
 class Fs {
     readAfter({err, data,res}){
         const datas = {
@@ -25,9 +27,18 @@ class Fs {
             });
         })
     }
-    writeFile({path}){
+    delFile({path}){
         return new Promise((res)=>{
-            // fs.writeFile(path, data[, options], callback)
+            fs.unlink(path, ()=>{
+                res({state:0})
+            })
+        })
+    }
+    writeFile({path,string}){
+        return new Promise((res)=>{
+            fs.writeFile(path, string, (err, data)=>{
+                this.readAfter({err, data,res})
+            })
         })
     }
     open({path,flags}){
@@ -41,6 +52,27 @@ class Fs {
         return new Promise((res)=>{
             fs.stat(path, (err, data)=> {
                 this.readAfter({err, data,res}) 
+            })
+        })
+    }
+    mkdir({path}){
+        return new Promise((res)=>{
+            fs.mkdir(path,(err)=>{
+                this.readAfter({err, data:null,res})
+            });
+        })
+    }
+    readdir({path}){
+        return new Promise((res)=>{
+            fs.readdir(path, (err, data)=>{
+                this.readAfter({err, data, res})
+            })
+        })
+    }
+    rmdir({path}){
+        return new Promise((res)=>{
+            fs.rmdir(path, (err)=>{
+                this.readAfter({err, data:null, res})
             })
         })
     }
