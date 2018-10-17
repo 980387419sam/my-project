@@ -48,7 +48,6 @@ module.exports = async (req, res, mongo) => {
 	let reqUrl = req.url;
 	reqUrl = url.parse(reqUrl);
 	const route = reqUrl.path;
-	res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
 	res.setHeader("Access-Control-Allow-Origin", "http://192.168.31.211:3000");
 	const alls = {
 		IP,

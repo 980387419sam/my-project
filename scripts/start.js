@@ -95,10 +95,17 @@ checkBrowsers(paths.appPath, isInteractive)
         return console.log(err);
       }
       if (isInteractive) {
+        
+        const fs = require("fs");
+        fs.writeFile('../server/urls.js', `export default "${urls.lanUrlForConfig}"`, (err)=>{
+          if (err) {
+            return console.error(err);
+          }
+        });
         clearConsole();
       }
       console.log(chalk.cyan('Starting the development server...\n'));
-      openBrowser(urls.localUrlForBrowser);
+      openBrowser(urls.lanUrlForConfig);
     });
 
     ['SIGINT', 'SIGTERM'].forEach(function(sig) {

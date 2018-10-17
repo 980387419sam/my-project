@@ -31,6 +31,7 @@ export default class RegisterForm extends React.PureComponent{
         },
     }
     UNSAFE_componentWillMount=async()=>{
+        console.log(process)
         const res = await postSendEmail({
             email:123
         })
