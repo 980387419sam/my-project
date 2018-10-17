@@ -42,19 +42,14 @@ class Request {
 	}
 }
 
-module.exports = async (req, res, mongo) => {
+module.exports = async ({req, res, mongo, fs}) => {
 	const request = new Request();
 	const IP = req.headers['x-real-ip'] || req.headers['x-forwarded-for'] || req.socket.remoteAddress
 	let reqUrl = req.url;
 	reqUrl = url.parse(reqUrl);
 	const route = reqUrl.path;
 	res.setHeader("Access-Control-Allow-Origin", "http://192.168.31.211:3000");
-	const alls = {
-		IP,
-		mongo,
-		req,
-		res,
-	}
+	const alls = { IP, mongo, req, res, fs}
 	const type = routes.type[route];
 	if(type === "post"){
 		var post = "";     

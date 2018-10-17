@@ -1,7 +1,7 @@
-const v2 = require('./v2/route')
+const main = require('./main/route')
 
 
-const routes = [v2];
+const routes = [main];
 
 const errorType = require("../../../src/Request/errorConfig");
 

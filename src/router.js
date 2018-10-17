@@ -1,10 +1,8 @@
 
 import defaultComponent from "./Component/default.jsx";
-import page from './Pages/route'
-import v2 from './v2/route'
+import main from './Main/route'
 
 export default [
     { path: "/", component: defaultComponent },
-    ...page,
-    ...v2
+    ...main,
 ];

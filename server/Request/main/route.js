@@ -10,10 +10,10 @@ const routers = {
 routes.forEach(route=>{
 	if(route.type&&route.callback){
 		Object.keys(route.type).forEach(r=>{
-			routers.type['/v2'+r] = route.type[r];
+			routers.type['/main'+r] = route.type[r];
 		});
 		Object.keys(route.callback).forEach(r=>{
-			routers.callback['/v2'+r] = route.callback[r];
+			routers.callback['/main'+r] = route.callback[r];
 		});
 	}
 });

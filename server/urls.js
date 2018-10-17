@@ -1,1 +1,1 @@
-export default "192.168.31.211"
+module.exports = {urls:"192.168.31.43",srcPort:"3000"}
